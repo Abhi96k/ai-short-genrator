@@ -5,7 +5,7 @@ import path from "path";
 import util from "util";
 import { getStorage, ref } from "firebase/storage";
 import { uploadBytes, getDownloadURL } from "firebase/storage";
-import {storage} from "../../../configs/FirebaseConfig";
+import { storage } from "../../../configs/FirebaseConfig";
 
 const client = new textToSpeech.TextToSpeechClient();
 

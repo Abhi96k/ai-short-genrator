@@ -12,6 +12,7 @@ function CreateNew() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [videoScript, setVideoScript] = useState([]);
+  const [audioFileUrl, setAudioFileUrl] = useState();
 
   const onHandleInputChange = (fieldName, fieldValue) => {
     console.log(fieldName, fieldValue);
@@ -76,6 +77,8 @@ function CreateNew() {
       })
       .then((response) => {
         console.log("Audio file generated successfully:", response.data);
+        setAudioFileUrl(response.data.result);
+        console.log("Audio file URL:", response.data.result);
       })
       .catch((error) => {
         console.error("Error generating audio file:", error);
