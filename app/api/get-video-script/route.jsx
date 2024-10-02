@@ -15,7 +15,6 @@ export async function POST(req) {
       );
     }
 
- 
     const result = await chatSession.sendMessage(prompt);
 
     const responseText = await result.response.text();

@@ -10,7 +10,7 @@ import CustomLoading from "./_components/CustomLoading";
 function CreateNew() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
-  const [videoScript, setVideoScript] = useState("");
+  const [videoScript, setVideoScript] = useState([]);
 
   const onHandleInputChange = (fieldName, fieldValue) => {
     console.log(fieldName, fieldValue);
@@ -33,22 +33,42 @@ function CreateNew() {
         `${formData.imagestyle} format for each scene. Provide the result in JSON format ` +
         `with imagePrompt and contextText as fields. No plain text.`;
 
-      const result = await axios
-        .post("/api/get-video-script", {
-          prompt: prompt,
-        })
-        .then((res) => {
-          console.log(res.data.result);
-          setVideoScript(res.data.result);
-        });
+      const result = await axios.post("/api/get-video-script", {
+        prompt: prompt,
+      });
 
-      console.log("Response:", result.data);
+      console.log(result.data); // Check API response structure
+      if (
+        result.data &&
+        result.data.result &&
+        Array.isArray(result.data.result.scenes)
+      ) {
+        setVideoScript(result.data.result.scenes);
+        GenerateAudioFile(result.data.result.scenes);
+      } else {
+        console.error("Scenes data is missing in the response");
+      }
     } catch (error) {
       console.error("Error fetching video script:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
+  const GenerateAudioFile = (scenes) => {
+    if (!scenes || scenes.length === 0) {
+      console.error("No scenes available to generate audio");
+      return;
+    }
+
+    let script = "";
+    scenes.forEach((scene) => {
+      script += scene.contextText + " ";
+    });
+
+    console.log("Script for audio:", script);
+  };
+  
   return (
     <div className="md:px-20">
       <h1 className="font-bold text-4xl text-primary text-center">
