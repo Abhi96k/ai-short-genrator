@@ -6,6 +6,7 @@ import SelectDuration from "./_components/SelectDuration";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import CustomLoading from "./_components/CustomLoading";
+import { v4 as uuidv4 } from "uuid";
 
 function CreateNew() {
   const [formData, setFormData] = useState({});
@@ -55,20 +56,34 @@ function CreateNew() {
     }
   };
 
-  const GenerateAudioFile = (scenes) => {
+  const GenerateAudioFile = async (scenes) => {
     if (!scenes || scenes.length === 0) {
       console.error("No scenes available to generate audio");
       return;
     }
 
     let script = "";
+    const id = uuidv4();
+
     scenes.forEach((scene) => {
       script += scene.contextText + " ";
     });
 
+    await axios
+      .post("/api/generate-audio", {
+        text: script,
+        id: id,
+      })
+      .then((response) => {
+        console.log("Audio file generated successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error generating audio file:", error);
+      });
+
     console.log("Script for audio:", script);
   };
-  
+
   return (
     <div className="md:px-20">
       <h1 className="font-bold text-4xl text-primary text-center">

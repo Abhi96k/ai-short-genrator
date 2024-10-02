@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+adroit-autumn-436017-p4-ca8a912b429f.json
+
+*.mp3
